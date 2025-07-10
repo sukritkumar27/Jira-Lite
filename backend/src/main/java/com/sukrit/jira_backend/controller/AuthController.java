@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +26,7 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired
-    private UserService userService;
+    private UserDetailsService userDetailsService;
 
 
     @PostMapping("/login")
@@ -35,10 +37,10 @@ public class AuthController {
         );
 
         // 2. Load your UserDetails (to include roles, etc.)
-        UserDto user = userService.getUserByUsername(req.getEmail());
+        UserDetails user = userDetailsService.loadUserByUsername(req.getEmail());
 
         // 3. Generate a JWT—using user.getUsername() or user.getId()
-        String token = jwtUtil.generateToken(user.getId());
+        String token = jwtUtil.generateToken(user.getUsername());
 
         // 4. Return the token
         return ResponseEntity.ok(Map.of("token", token));

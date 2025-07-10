@@ -2,9 +2,11 @@ package com.sukrit.jira_backend.controller;
 
 import com.sukrit.jira_backend.dto.GenericResponse;
 import com.sukrit.jira_backend.dto.user.UserDto;
+import com.sukrit.jira_backend.security.RequireAuthHeader;
 import com.sukrit.jira_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @RequireAuthHeader
     @GetMapping("/{userId}")
     public ResponseEntity<GenericResponse<UserDto>> getUserById(@PathVariable Long userId){
         return ResponseEntity.ok(new GenericResponse<>(userService.getUserById(userId)));
