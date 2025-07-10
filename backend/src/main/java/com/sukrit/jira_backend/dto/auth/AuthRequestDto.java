@@ -1,0 +1,9 @@
+package com.sukrit.jira_backend.dto.auth;
+
+import lombok.Data;
+
+@Data
+public class AuthRequestDto {
+    private String email;
+    private String password;
+}
